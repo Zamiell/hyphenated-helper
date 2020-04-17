@@ -1,0 +1,46 @@
+linters:
+  enable-all: true
+  disable:
+    # We use many long functions
+    - funlen
+    # We use many globals in the code base
+    - gochecknoglobals
+    # gocognit complains about having large functions
+    - gocognit
+    # goconst complains about some common strings
+    - goconst
+    # gocritic complains about needing to make case statements
+    - gocritic
+    # gocyclo complains about having large functions
+    - gocyclo
+    # gofmt is not needed because we are running goimports (which is a superset of gofmt)
+    - gofmt
+    # gomnd complains about common numbers
+    - gomnd
+    # This program contains many long strings
+    - lll
+    # We do not care about making structs take less memory
+    - maligned 
+    # We use some unused parameters for command function uniformity
+    - unparam
+    # WSL requires excessive newlines around if statements
+    - wsl
+
+issues:
+  # We want to use golint but we don't care about some of the things that it complains about
+  exclude:
+    # We have many exported functions without comments
+    - "exported \\w+ (\\S*['.]*)([a-zA-Z'.*]*) should have comment or be unexported"
+    # We block-scope variables in many places, making it impossible to outdent
+    - "if block ends with a return statement, so drop this else and outdent its block"
+    # TODO in comments is okay
+    - "Line contains TODO/BUG/FIXME"
+
+linters-settings:
+  govet:
+    # Checking for shadowed variables is experimental and disabled by default
+    check-shadowing: true
+
+  whitespace:
+    # Enforce newlines (or comments) after every multi-line if statement
+    multi-if: true
