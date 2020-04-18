@@ -9,9 +9,6 @@
 hyphenated-helper
 hyphenated-helper~
 
-# Log files
-logs/*.log*
-
 # --------------------------
 # GitHub .gitignore Template
 # --------------------------
