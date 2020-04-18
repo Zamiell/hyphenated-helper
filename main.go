@@ -129,6 +129,9 @@ func discordMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if command == "badhere" {
 		msg := "It looks like there are already some Hyphen-ated members playing in one of the voice channels. Did you already ask to join them in their next game? Unless there is a specific reason (e.g. experts playing a variant that is too difficult for a beginner), then you should make an effort to join existing players **before** pinging the rest of the server. The \"/here\" command is generally only used when there is no-one around and playing a game already."
 		discordSend(m.ChannelID, msg)
+	} else if command == "wrongchannel" {
+		msg := "It looks like you are asking a question about the Hyphen-ated conventions or the Hyphen-ated group. Please put all such questions in the #questions-and-help channel, as that's what it is for."
+		discordSend(m.ChannelID, msg)
 	}
 }
 
