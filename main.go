@@ -2,9 +2,11 @@ package main
 
 import (
 	"os"
+	"os/signal"
 	"path"
 	"path/filepath"
 	"strings"
+	"syscall"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
@@ -76,6 +78,15 @@ func main() {
 		logger.Fatal("Failed to open the Discord session:", err)
 		return
 	}
+
+	// Block until a terminal signal is received
+	logger.Info("Hyphen-ated helper is now running.")
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
+	<-sc
+
+	// Cleanly close down the Discord session.
+	discord.Close()
 }
 
 func discordReady(s *discordgo.Session, event *discordgo.Ready) {
