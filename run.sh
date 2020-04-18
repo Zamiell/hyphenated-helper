@@ -15,7 +15,7 @@ cd "$DIR"
 go build
 if [ $? -eq 0 ]; then
     # The build was successful; run the server
-    "$REPO"
+    "$DIR/$REPO"
 else
     echo "$REPO - Go compilation failed!"
 fi
