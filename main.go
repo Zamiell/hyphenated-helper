@@ -42,8 +42,7 @@ func main() {
 	envPath := path.Join(projectPath, ".env")
 	if _, err := os.Stat(envPath); os.IsNotExist(err) {
 		logger.Fatal("The \"" + envPath + "\" file does not exist. " +
-			"Did you run the \"install_dependencies.sh\" script before running the server? " +
-			"This file should automatically be created when running this script.")
+			"Copy the \".env_template\" file to \".env\".")
 		return
 	}
 
