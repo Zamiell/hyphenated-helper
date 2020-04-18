@@ -1,3 +1,18 @@
+# ------------------------
+# Hyphen-ated Helper Stuff
+# ------------------------
+
+# Contains secrets
+.env
+
+# The compiled binary
+hyphenated-helper
+hyphenated-helper~
+
+# --------------------------
+# GitHub .gitignore Template
+# --------------------------
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
