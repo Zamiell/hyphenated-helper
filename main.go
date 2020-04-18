@@ -124,7 +124,7 @@ func discordMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	command = strings.ToLower(command) // Commands are case-insensitive
 
 	if command == "badquestion" {
-		msg := "Your question is not specific enough. In order to properly answer it, we need to know the amount of players, all of the cards in all of the hands, the amount of clues, and so forth. Please type out a full Alice and Bob story in the style of the reference document. (e.g. <https://github.com/Zamiell/hanabi-conventions/blob/master/Reference.md#the-reverse-finesse>)"
+		msg := "Your question is not specific enough. In order to properly answer it, we need to know the amount of players in the game, all of the cards in all of the hands, the amount of current clues, and so forth. Please type out a full Alice and Bob story in the style of the reference document. (e.g. <https://github.com/Zamiell/hanabi-conventions/blob/master/Reference.md#the-reverse-finesse>)"
 		discordSend(m.ChannelID, msg)
 	} else if command == "badhere" {
 		msg := "It looks like there are already some Hyphen-ated members playing in one of the voice channels. Did you already ask to join them in their next game? Unless there is a specific reason (e.g. experts playing a variant that is too difficult for a beginner), then you should make an effort to join existing players **before** pinging the rest of the server. The \"/here\" command is generally only used when there is no-one around and playing a game already."
