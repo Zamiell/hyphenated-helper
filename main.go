@@ -116,11 +116,12 @@ func discordMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	args := strings.Split(m.Content, " ")
 	command := args[0]
 
-	// Commands will start with a "/", so we can ignore everything else
-	if !strings.HasPrefix(command, "/") {
+	// Commands will start with a "!", so we can ignore everything else
+	// (this is to not conflict with the Hanabi server, where commands start with "/")
+	if !strings.HasPrefix(command, "!") {
 		return
 	}
-	command = strings.TrimPrefix(command, "/")
+	command = strings.TrimPrefix(command, "!")
 	command = strings.ToLower(command) // Commands are case-insensitive
 
 	if command == "badquestion" {
