@@ -16,8 +16,8 @@ export HOME=/root
 cd "$DIR"
 go build
 if [ $? -eq 0 ]; then
-    # The build was successful; restart the server
-    supervisorctl restart "$REPO"
+  # The build was successful; restart the server
+  supervisorctl restart "$REPO"
 else
-    echo "$REPO - Go compilation failed!"
+  echo "$REPO - Go compilation failed!"
 fi
