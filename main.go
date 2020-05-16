@@ -133,6 +133,9 @@ func discordMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if command == "wrongchannel" {
 		msg := "It looks like you are asking a question about the Hyphen-ated conventions or the Hyphen-ated group. Please put all such questions in the #questions-and-help channel, as that's what it is for."
 		discordSend(m.ChannelID, msg)
+	} else if command == "2pquestion" {
+		msg := "This channel is mostly for asking clarification questions about the Hyphen-ated conventions. In 2-player games, this doesn't really apply, because you can just play with your teammate in the exact way that you want without having to ask anybody else. Furthermore, the Hyphen-ated group typically only plays 3-6 player games, as 2-player games are considered to be much more trivial. Please ask 2-player questions sparingly."
+		discordSend(m.ChannelID, msg)
 	}
 }
 
