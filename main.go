@@ -16,7 +16,8 @@ import (
 )
 
 const (
-	projectName = "hyphenated-helper"
+	projectName     = "hyphenated-helper"
+	discordZamielID = "71242588694249472"
 )
 
 var (
@@ -153,6 +154,11 @@ func discordCheckCommand(m *discordgo.MessageCreate) {
 }
 
 func commandDelete(m *discordgo.MessageCreate, ruleNum int) {
+	// Only certain people can use this command
+	if m.Author.ID != discordZamielID {
+		return
+	}
+
 	// Delete the "/d" message
 	discordDelete(m.ChannelID, m.Message.ID)
 
