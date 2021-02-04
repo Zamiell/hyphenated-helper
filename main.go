@@ -192,10 +192,15 @@ func commandDelete(m *discordgo.MessageCreate, ruleNum int) {
 	} else {
 		ruleText = "rule #" + strconv.Itoa(ruleNum)
 	}
-	msg := fmt.Sprintf(
-		"It looks like your question in the `#convention-questions` channel broke %v, so it has been deleted.\nPlease make sure that your message follows the rules: <https://github.com/Zamiell/hanabi-conventions/blob/master/misc/Convention_Questions.md>",
+	msg := "You asked the following question in the `#convention-questions` channel:\n"
+	msg += "```\n"
+	msg += lastMessage.Content
+	msg += "```\n"
+	msg += fmt.Sprintf(
+		"An administrator thinks that this message might have broken %v, so it has been deleted.\n",
 		ruleText,
 	)
+	msg += "Please make sure that your message follows the rules: <https://github.com/Zamiell/hanabi-conventions/blob/master/misc/Convention_Questions.md>"
 	discordSendPM(lastMessage.Author.ID, msg)
 }
 
