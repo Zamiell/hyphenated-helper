@@ -1,29 +1,10 @@
 linters:
   enable-all: true
   disable:
-    # We use many long functions
     - funlen
-    # We use many globals in the code base
     - gochecknoglobals
-    # gocognit complains about having large functions
-    - gocognit
-    # goconst complains about some common strings
-    - goconst
-    # gocritic complains about needing to make case statements
-    - gocritic
-    # gocyclo complains about having large functions
-    - gocyclo
-    # gofmt is not needed because we are running goimports (which is a superset of gofmt)
-    - gofmt
-    # gomnd complains about common numbers
-    - gomnd
-    # This program contains many long strings
     - lll
-    # We do not care about making structs take less memory
-    - maligned 
-    # We use some unused parameters for command function uniformity
-    - unparam
-    # WSL requires excessive newlines around if statements
+    - nlreturn
     - wsl
 
 issues:
