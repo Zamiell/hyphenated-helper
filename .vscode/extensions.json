@@ -1,0 +1,9 @@
+// These are Visual Studio Code extensions that are intended to be used with this particular
+// repository
+// https://code.visualstudio.com/docs/editor/extension-gallery#_workspace-recommended-extensions
+{
+  "recommendations": [
+    "golang.go", // The server is written in Golang
+    "streetsidesoftware.code-spell-checker", // A spell-checker extension based on cspell is used
+  ],
+}

@@ -3,6 +3,7 @@ linters:
   disable:
     - funlen
     - gochecknoglobals
+    - gofumpt
     - lll
     - nlreturn
     - wsl

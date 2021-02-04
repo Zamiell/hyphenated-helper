@@ -1,0 +1,19 @@
+{
+    "version": "0.1",
+    "language": "en",
+    "dictionaries": [
+        "en_US",
+        "companies",
+        "softwareTerms",
+        "html"
+    ],
+    "words": [
+        "ated",
+        "bwmarrin",
+        "discordgo",
+        "godotenv",
+        "hanabi",
+        "infof",
+        "joho"
+    ]
+}

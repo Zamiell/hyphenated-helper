@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"syscall"
 
@@ -18,10 +20,10 @@ const (
 )
 
 var (
-	logger       *logging.Logger
-	discord      *discordgo.Session
-	discordToken string
-	discordBotID string
+	logger         *logging.Logger
+	discordSession *discordgo.Session
+	discordToken   string
+	discordBotID   string
 )
 
 func main() {
@@ -70,15 +72,15 @@ func main() {
 		logger.Error("Failed to create a Discord session:", err)
 		return
 	} else {
-		discord = v
+		discordSession = v
 	}
 
 	// Register function handlers for various events
-	discord.AddHandler(discordReady)
-	discord.AddHandler(discordMessageCreate)
+	discordSession.AddHandler(discordReady)
+	discordSession.AddHandler(discordMessageCreate)
 
 	// Open the websocket and begin listening
-	if err := discord.Open(); err != nil {
+	if err := discordSession.Open(); err != nil {
 		logger.Fatal("Failed to open the Discord session:", err)
 		return
 	}
@@ -90,7 +92,7 @@ func main() {
 	<-sc
 
 	// Cleanly close down the Discord session
-	discord.Close()
+	discordSession.Close()
 }
 
 func discordReady(s *discordgo.Session, event *discordgo.Ready) {
@@ -106,7 +108,7 @@ func discordMessageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// Get the channel
 	var channel *discordgo.Channel
-	if v, err := discord.Channel(m.ChannelID); err != nil {
+	if v, err := discordSession.Channel(m.ChannelID); err != nil {
 		logger.Error("Failed to get the Discord channel of \""+m.ChannelID+"\":", err)
 		return
 	} else {
@@ -124,29 +126,102 @@ func discordCheckCommand(m *discordgo.MessageCreate) {
 	args := strings.Split(m.Content, " ")
 	command := args[0]
 
-	// Commands will start with a "!", so we can ignore everything else
-	// (this is to not conflict with the Hanabi server, where commands start with "/")
-	if !strings.HasPrefix(command, "!") {
+	if !strings.HasPrefix(command, "/") {
 		return
 	}
 
-	command = strings.TrimPrefix(command, "!")
+	command = strings.TrimPrefix(command, "/")
 	command = strings.ToLower(command) // Commands are case-insensitive
 
-	if command == "badquestion" {
-		msg := "Your question is not specific enough. In order to properly answer it, we need to know the amount of players in the game, all of the cards in all of the hands, the amount of current clues, and so forth. Please type out a full Alice and Bob story in the style of the reference document. (e.g. <https://github.com/Zamiell/hanabi-conventions/blob/master/Reference.md#the-reverse-finesse>)"
-		discordSend(m.ChannelID, msg)
-	} else if command == "wrongchannel" {
+	switch command {
+	case "d":
+		commandDelete(m, 0)
+	case "d1":
+		commandDelete(m, 1)
+	case "d2":
+		commandDelete(m, 2)
+	case "d3":
+		commandDelete(m, 3)
+	case "d4":
+		commandDelete(m, 4)
+	case "d5":
+		commandDelete(m, 5)
+	case "wrongchannel":
 		msg := "It looks like you are asking a question about the Hyphen-ated conventions or the Hyphen-ated group. Please put all such questions in the #questions-and-help channel, as that's what it is for."
 		discordSend(m.ChannelID, msg)
 	}
 }
 
+func commandDelete(m *discordgo.MessageCreate, ruleNum int) {
+	// Delete the "/d" message
+	discordDelete(m.ChannelID, m.Message.ID)
+
+	// Find the last message in the channel
+	var messages []*discordgo.Message
+	if v, err := discordSession.ChannelMessages(m.ChannelID, 1, "", "", ""); err != nil {
+		logger.Errorf(
+			"Failed to get the last message from channel %v: %v",
+			m.ChannelID,
+			err,
+		)
+		return
+	} else {
+		messages = v
+	}
+
+	if len(messages) == 0 {
+		logger.Errorf("Failed to get any messages from channel %v.", m.ChannelID)
+		return
+	}
+
+	lastMessage := messages[0]
+
+	// Delete the last message
+	discordDelete(m.ChannelID, lastMessage.ID)
+
+	// Send them a message explaining why their message was deleted
+	var ruleText string
+	if ruleNum == 0 {
+		ruleText = "one of the 5 rules"
+	} else {
+		ruleText = "rule #" + strconv.Itoa(ruleNum)
+	}
+	msg := fmt.Sprintf(
+		"It looks like your question in the `#convention-questions` channel broke %v, so it has been deleted.\nPlease make sure that your message follows the rules: <https://github.com/Zamiell/hanabi-conventions/blob/master/misc/Convention_Questions.md>",
+		ruleText,
+	)
+	discordSendPM(lastMessage.Author.ID, msg)
+}
+
 func discordSend(to string, msg string) {
-	if _, err := discord.ChannelMessageSend(to, msg); err != nil {
+	if _, err := discordSession.ChannelMessageSend(to, msg); err != nil {
 		// Occasionally, sending messages to Discord can time out; if this occurs,
 		// do not bother retrying, since losing a single message is fairly meaningless
-		logger.Info("Failed to send \""+msg+"\" to Discord:", err)
+		logger.Infof("Failed to send \"%v\" to Discord: %v", msg, err)
+		return
+	}
+}
+
+func discordSendPM(to string, msg string) {
+	var PMChannel *discordgo.Channel
+	if v, err := discordSession.UserChannelCreate(to); err != nil {
+		logger.Errorf("Failed to get the PM channel for user %v: %v", to, err)
+		return
+	} else {
+		PMChannel = v
+	}
+
+	discordSend(PMChannel.ID, msg)
+}
+
+func discordDelete(channelID string, messageID string) {
+	if err := discordSession.ChannelMessageDelete(channelID, messageID); err != nil {
+		logger.Errorf(
+			"Failed to delete message %v from channel %v: %v",
+			messageID,
+			channelID,
+			err,
+		)
 		return
 	}
 }
