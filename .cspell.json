@@ -10,11 +10,21 @@
     "words": [
         "ated",
         "bwmarrin",
+        "cyclop",
         "discordgo",
+        "funlen",
+        "gochecknoglobals",
         "godotenv",
+        "gofumpt",
+        "golint",
+        "govet",
         "hanabi",
         "infof",
         "joho",
+        "nlreturn",
+        "outdent",
+        "padi",
+        "unexported",
         "zamiel"
     ]
 }
