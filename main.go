@@ -25,6 +25,9 @@ var (
 	discordSession *discordgo.Session
 	discordToken   string
 	discordBotID   string
+	allowedMembers = []string{
+		"",
+	}
 )
 
 func main() {
