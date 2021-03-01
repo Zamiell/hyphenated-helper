@@ -54,6 +54,6 @@ func commandDelete(m *discordgo.MessageCreate, ruleNum int) {
 		"An administrator thinks that this message might have broken %v, so it has been deleted.\n",
 		ruleText,
 	)
-	msg += "Please make sure that your message follows the rules: <https://github.com/hanabi/hanabi.github.io/blob/main/misc/Convention_Questions.md>"
+	msg += "Please make sure that your message follows the rules: <https://github.com/hanabi/hanabi.github.io/blob/main/misc/convention-questions.md>"
 	discordSendPM(lastMessage.Author.ID, msg)
 }
