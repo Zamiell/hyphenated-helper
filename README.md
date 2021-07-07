@@ -8,8 +8,6 @@ This is a small helper program for [the Hyphen-ated Hanabi group](https://github
 
 * Download and install [Go](https://golang.org/).
 * Clone the repo.
-* Compile the project:
-  * `go build`
 * Set up environment variables:
   * `cp .env_template .env`
   * Edit the `.env` file with the token for your bot.
